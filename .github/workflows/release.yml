@@ -24,9 +24,17 @@ jobs:
       - name: Install Android SDK platform and build-tools
         run: |
           sdkmanager "platforms;android-34" "build-tools;34.0.0"
-      - name: Restore signing key
+      - name: Generate signing key
         run: |
-          echo $LUMEN_KEYSTORE_B64 | base64 -d > app/lumen-release.jks
+          keytool -genkeypair -v \
+            -keystore app/lumen-release.jks \
+            -alias lumen \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass $LUMEN_KEYSTORE_PASSWORD \
+            -keypass $LUMEN_KEYSTORE_PASSWORD \
+            -dname "CN=lumen, O=lumen, OU=lumen, L=lumen, ST=lumen, C=US"
       - name: Build
         run: |
           ./gradlew assembleRelease
