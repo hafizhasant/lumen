@@ -17,9 +17,9 @@ android {
 
     signingConfigs {
         create("release") {
-            val ksPath = System.getenv("KEYSTORE_PATH")
-                ?: System.getenv("LUMEN_KEYSTORE_PATH")
-                ?: "app/lumen-release.jks"
+        val ksPath = System.getenv("KEYSTORE_PATH")
+            ?: System.getenv("LUMEN_KEYSTORE_PATH")
+            ?: project.file("app/lumen-release.jks").absolutePath
             storeFile = file(ksPath)
             storePassword = System.getenv("KEYSTORE_PASSWORD")
                 ?: System.getenv("LUMEN_KEYSTORE_PASSWORD")

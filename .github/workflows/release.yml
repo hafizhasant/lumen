@@ -24,10 +24,18 @@ jobs:
       - name: Install Android SDK platform and build-tools
         run: |
           sdkmanager "platforms;android-34" "build-tools;34.0.0"
-          ls $ANDROID_HOME/platforms
-      - run: echo $LUMEN_KEYSTORE_B64 | base64 -d > app/lumen-release.jks
-      - run: echo "LUMEN_KEYSTORE_PASSWORD=$LUMEN_KEYSTORE_PASSWORD" >> local.properties
-      - run: ./gradlew assembleRelease
+      - name: Restore signing key
+        run: |
+          echo $LUMEN_KEYSTORE_B64 | base64 -d > app/lumen-release.jks
+      - name: Build
+        run: |
+          ./gradlew assembleRelease
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/app/lumen-release.jks
+          LUMEN_KEYSTORE_PATH: ${{ github.workspace }}/app/lumen-release.jks
+          KEYSTORE_PASSWORD: ${{ secrets.LUMEN_KEYSTORE_PASSWORD }}
+          LUMEN_KEYSTORE_PASSWORD: ${{ secrets.LUMEN_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.LUMEN_KEYSTORE_PASSWORD }}
       - uses: softprops/action-gh-release@v2
         with:
           files: app/build/outputs/apk/release/*.apk
