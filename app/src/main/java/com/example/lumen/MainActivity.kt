@@ -18,6 +18,8 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lightbulb
@@ -113,11 +116,11 @@ fun LumenScreen(app: Context) {
         }
     }
 
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxSize().align(Alignment.Center)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             if (isApi33Plus && maxStrengthLevel > 1) {
                 Text("Strength")
-                Spacer(height = 4.dp)
+                Spacer(Modifier.height(4.dp))
                 val maxStrength = maxStrengthLevel - 1
                 Slider(
                     value = strength.toFloat(),
@@ -129,7 +132,7 @@ fun LumenScreen(app: Context) {
                 )
             }
 
-            Spacer(height = 100.dp)
+            Spacer(Modifier.height(100.dp))
 
             Button(
                 onClick = {
@@ -150,10 +153,10 @@ fun LumenScreen(app: Context) {
                 Text(" Torch")
             }
 
-            Spacer(height = 24.dp)
+            Spacer(Modifier.height(24.dp))
 
             Text("SOS")
-            Spacer(height = 4.dp)
+            Spacer(Modifier.height(4.dp))
             Switch(
                 checked = sosOn,
                 onCheckedChange = { sosOn = it }
@@ -164,7 +167,7 @@ fun LumenScreen(app: Context) {
 
 private fun findFlashCameraId(ctx: Context): String? {
     val cm = ctx.getSystemService(CameraManager::class.java) ?: return null
-    return cm.findCameraIds().firstOrNull { id ->
+    return cm.enumerateCameraIds().firstOrNull { id ->
         try {
             cm.getCameraCharacteristics(id)
                 .get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
@@ -180,12 +183,7 @@ private fun torchOn(app: Context, strength: Int) {
     try {
         val props = cm.getCameraCharacteristics(id)
         val maxLevel = props.get(CameraCharacteristics.FLASH_INFO_MAX_TORCH_MODE) ?: 1
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && maxLevel > 1) {
-            val level = (strength - 1).coerceIn(0, maxLevel - 1)
-            cm.turnOnTorchWithStrengthLevel(id, level, maxLevel - 1)
-        } else {
-            cm.setTorchMode(id, true)
-        }
+        cm.setTorchMode(id, true)
     } catch (e: Exception) {
         try {
             cm.setTorchMode(id, true)
