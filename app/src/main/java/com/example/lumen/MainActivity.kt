@@ -7,6 +7,8 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +27,6 @@ import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
@@ -218,10 +219,7 @@ private fun FlashlightDotArc(active: Boolean, modifier: Modifier = Modifier) {
                     .size(4.dp)
                     .clip(RoundedCornerShape(50.dp))
                     .background(color)
-                    .offset(
-                        x = (x * 220.dp).toInt(),
-                        y = (y * 110.dp).toInt()
-                    )
+                    .offset(x = (x * 220f).toInt(), y = (y * 110f).toInt())
             )
         }
     }
