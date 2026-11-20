@@ -1,8 +1,9 @@
 # Changelog
-
-## [0.1.4] - 2026-11-20
-- Added Android SDK setup step to release.yml so compileSdk 34 resolves Android classes in CI (root cause of failed release build)
-- Bumped versionCode to 4, versionName to 0.1.4
+ 
+## [0.1.5] - 2026-11-20
+- Fixed CI build: `android-actions/setup-android@v4` only installed `platform-tools` by default. Added `packages: 'platforms;android-34 build-tools;34.0.0 platform-tools'` so compileSdk 34 resolves Android platform classes (camera2 `enumerateCameraIds`, `FLASH_INFO_MAX_TORCH_MODE`) in CI.
+- Added missing `import androidx.compose.foundation.layout.align` in MainActivity.kt (line 119 `.align()` was unresolved).
+- Bumped versionCode to 5, versionName to 0.1.5
 
 ## [0.1.3] - 2026-11-20
 - Fixed Kotlin compile errors in MainActivity.kt:

@@ -11,8 +11,8 @@ android {
         applicationId = "com.example.lumen"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "0.1.4"
+        versionCode = 5
+        versionName = "0.1.5"
     }
 
     signingConfigs {
@@ -26,6 +26,12 @@ android {
             keyAlias = "lumen"
             keyPassword = System.getenv("KEY_PASSWORD")
                 ?: System.getenv("LUMEN_KEYSTORE_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
