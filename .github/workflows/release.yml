@@ -18,6 +18,7 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v4
+      - uses: android-actions/setup-android@v4
       - run: echo $LUMEN_KEYSTORE_B64 | base64 -d > app/lumen-release.jks
       - run: echo "LUMEN_KEYSTORE_PASSWORD=$LUMEN_KEYSTORE_PASSWORD" >> local.properties
       - run: ./gradlew assembleRelease

@@ -1,5 +1,9 @@
 # Changelog
- 
+
+## [0.1.4] - 2026-11-20
+- Added Android SDK setup step to release.yml so compileSdk 34 resolves Android classes in CI (root cause of failed release build)
+- Bumped versionCode to 4, versionName to 0.1.4
+
 ## [0.1.3] - 2026-11-20
 - Fixed Kotlin compile errors in MainActivity.kt:
   - Added missing `androidx.compose.foundation.layout.height`/`width` imports
