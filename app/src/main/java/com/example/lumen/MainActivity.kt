@@ -9,18 +9,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.align
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material3.Button
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
@@ -35,7 +40,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
@@ -75,8 +85,7 @@ fun LumenTheme(content: @Composable () -> Unit) {
 
 @Composable
 fun LumenScreen(app: Context) {
-    val ctx = LocalContext.current
-    val maxStrengthLevel = remember(ctx) { readMaxStrengthLevel(ctx) }
+    val maxStrengthLevel = remember(app) { readMaxStrengthLevel(app) }
 
     var torchOn by remember { mutableStateOf(false) }
     var strength by remember { mutableStateOf(1) }
@@ -96,63 +105,125 @@ fun LumenScreen(app: Context) {
                     delay(1000L)
                 }
             } finally {
-                // Runs when SOS is switched off or the composable leaves composition.
                 turnTorchOff(app)
             }
         }
     }
+
+    val torchOnColor = if (torchOn) Color(0xFFD8B755) else Color(0xFFF2F2F2)
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (maxStrengthLevel > 1) {
-            Text("Strength")
-            Spacer(Modifier.height(4.dp))
-            Slider(
-                value = strength.toFloat(),
-                valueRange = 1f..maxStrengthLevel.toFloat(),
-                steps = (maxStrengthLevel - 2).coerceAtLeast(0),
-                onValueChange = {
-                    strength = it.toInt()
-                    if (torchOn) turnTorchOn(app, strength)
-                }
-            )
-            Spacer(Modifier.height(24.dp))
-        }
+        Text(
+            text = if (torchOn) "Torch: on" else "Torch: off",
+            color = Color(0xFFF0F0F0),
+            fontSize = 30.dp,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 64.dp)
+        )
 
-        Button(
-            enabled = !sosOn,
-            onClick = {
-                if (torchOn) {
-                    turnTorchOff(app)
-                    torchOn = false
-                } else {
-                    turnTorchOn(app, strength)
-                    torchOn = true
-                }
-            }
+        Spacer(Modifier.height(44.dp))
+
+        Surface(
+            modifier = Modifier
+                .width(300.dp)
+                .height(520.dp)
+                .clip(RoundedCornerShape(56.dp))
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0x2E000000),
+                            Color(0x1A000000)
+                        )
+                    )
+                )
+                .clickable {
+                    if (sosOn) return@clickable
+                    if (torchOn) {
+                        turnTorchOff(app)
+                        torchOn = false
+                    } else {
+                        turnTorchOn(app, strength)
+                        torchOn = true
+                    }
+                },
+            color = Color.Transparent
         ) {
-            Icon(
-                imageVector = Icons.Filled.Lightbulb,
-                contentDescription = "Torch"
-            )
-            Spacer(Modifier.width(8.dp))
-            Text("Torch")
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                FlashlightDotArc(
+                    active = torchOn,
+                    modifier = Modifier
+                        .width(220.dp)
+                        .height(120.dp)
+                        .offset(y = -140.dp)
+                )
+
+                Icon(
+                    imageVector = Icons.Filled.Lightbulb,
+                    contentDescription = "Toggle torch",
+                    tint = torchOnColor,
+                    modifier = Modifier.height(130.dp)
+                )
+            }
         }
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(20.dp))
 
-        Text("SOS")
+        if (maxStrengthLevel > 1) {
+            Text(
+                text = "Strength ${strength}/${maxStrengthLevel}",
+                color = Color(0x80FFFFFF),
+                fontSize = 13.dp,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+
+        Spacer(Modifier.height(20.dp))
+
+        Text("SOS", color = Color(0x80FFFFFF), fontSize = 13.dp)
         Spacer(Modifier.height(4.dp))
         Switch(
             checked = sosOn,
             onCheckedChange = {
                 sosOn = it
                 if (it) torchOn = false
-            }
+            },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         )
+    }
+}
+
+@Composable
+private fun FlashlightDotArc(active: Boolean, modifier: Modifier = Modifier) {
+    val color = if (active) Color(0xFFD8B755) else Color(0x66FFFFFF)
+    val dots = remember {
+        (10..31).map { i ->
+            val t = i.toFloat() / 31f
+            val x = t
+            val y = 0.4f * Math.sin(Math.PI * t)
+            Pair(x, y)
+        }
+    }
+    Box(modifier = modifier) {
+        dots.forEach { (x, y) ->
+            Box(
+                modifier = Modifier
+                    .size(4.dp)
+                    .clip(RoundedCornerShape(50.dp))
+                    .background(color)
+                    .offset(
+                        x = (x * 220.dp).toInt(),
+                        y = (y * 110.dp).toInt()
+                    )
+            )
+        }
     }
 }
 
@@ -160,7 +231,8 @@ private fun findFlashCameraId(ctx: Context): String? {
     val cm = ctx.getSystemService(CameraManager::class.java) ?: return null
     return cm.cameraIdList.firstOrNull { id ->
         try {
-            cm.getCameraCharacteristics(id).get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+            cm.getCameraCharacteristics(id)
+                .get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
         } catch (e: Exception) {
             false
         }
