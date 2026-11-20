@@ -11,8 +11,8 @@ android {
         applicationId = "com.example.lumen"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.1.2"
     }
 
     signingConfigs {
@@ -34,7 +34,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.9.24"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
     compileOptions {
