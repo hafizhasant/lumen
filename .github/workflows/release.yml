@@ -26,19 +26,25 @@ jobs:
           sdkmanager "platforms;android-34" "build-tools;34.0.0"
       - name: Generate signing key
         run: |
-          keytool -genkeypair -v -keystore app/lumen-release.jks \
-          -alias lumen -keyalg RSA -keysize 2048 -validity 10000 \
-          -storepass mysecretpass -keypass mysecretpass \
-          -dname "CN=lumen, O=lumen, C=US"
+          rm -f app/lumen-release.jks
+          keytool -genkeypair -v \
+          -keystore app/lumen-release.jks \
+          -alias lumen \
+          -keyalg RSA \
+          -keysize 2048 \
+          -validity 10000 \
+          -storepass mysecretpassword123 \
+          -keypass mysecretpassword123 \
+          -dname "CN=lumen, O=lumen, L=lumen, ST=lumen, C=US"
       - name: Build
         run: |
           ./gradlew assembleRelease
         env:
           KEYSTORE_PATH: ${{ github.workspace }}/app/lumen-release.jks
           LUMEN_KEYSTORE_PATH: ${{ github.workspace }}/app/lumen-release.jks
-          KEYSTORE_PASSWORD: mysecretpass
-          LUMEN_KEYSTORE_PASSWORD: mysecretpass
-          KEY_PASSWORD: mysecretpass
+          KEYSTORE_PASSWORD: mysecretpassword123
+          LUMEN_KEYSTORE_PASSWORD: mysecretpassword123
+          KEY_PASSWORD: mysecretpassword123
       - uses: softprops/action-gh-release@v2
         with:
           files: app/build/outputs/apk/release/*.apk
