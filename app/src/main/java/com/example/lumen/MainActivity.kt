@@ -30,9 +30,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -116,7 +115,10 @@ fun LumenScreen(app: Context) {
     val torchOnColor = if (torchOn) Color(0xFFD8B755) else Color(0xFFF2F2F2)
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF0A0E14))
+            .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -131,14 +133,14 @@ fun LumenScreen(app: Context) {
 
         Surface(
             modifier = Modifier
-                .width(300.dp)
-                .height(520.dp)
-                .clip(RoundedCornerShape(56.dp))
+                .width(230.dp)
+                .height(380.dp)
+                .clip(RoundedCornerShape(44.dp))
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color(0x2E000000),
-                            Color(0x1A000000)
+                            Color(0x3D1A2028),
+                            Color(0x2A101820)
                         )
                     )
                 )
@@ -161,43 +163,46 @@ fun LumenScreen(app: Context) {
                 FlashlightDotArc(
                     active = torchOn,
                     modifier = Modifier
-                        .width(220.dp)
-                        .height(120.dp)
-                        .offset(y = -140.dp)
+                        .width(170.dp)
+                        .height(90.dp)
+                        .offset(y = -90.dp)
                 )
 
                 Icon(
                     imageVector = Icons.Filled.Lightbulb,
                     contentDescription = "Toggle torch",
                     tint = torchOnColor,
-                    modifier = Modifier.height(130.dp)
+                    modifier = Modifier.height(100.dp)
                 )
             }
         }
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(24.dp))
 
-        if (maxStrengthLevel > 1) {
-            Text(
-                text = "Strength ${strength}/${maxStrengthLevel}",
-                color = Color(0x80FFFFFF),
-                style = TextStyle(fontSize = 13.sp),
-                modifier = Modifier.padding(top = 4.dp)
-            )
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(horizontalAlignment = Alignment.Start) {
+                Text(
+                    text = if (maxStrengthLevel > 1) "Strength ${strength}/${maxStrengthLevel}" else "Torch",
+                    color = Color(0xA0FFFFFF),
+                    style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                )
+            }
+            Column(horizontalAlignment = Alignment.End) {
+                Text("SOS", color = Color(0xA0FFFFFF), style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Medium))
+                Spacer(Modifier.height(6.dp))
+                Switch(
+                    checked = sosOn,
+                    onCheckedChange = {
+                        sosOn = it
+                        if (it) torchOn = false
+                    }
+                )
+            }
         }
-
-        Spacer(Modifier.height(20.dp))
-
-        Text("SOS", color = Color(0x80FFFFFF), style = TextStyle(fontSize = 13.sp))
-        Spacer(Modifier.height(4.dp))
-        Switch(
-            checked = sosOn,
-            onCheckedChange = {
-                sosOn = it
-                if (it) torchOn = false
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
     }
 }
 
@@ -219,7 +224,7 @@ private fun FlashlightDotArc(active: Boolean, modifier: Modifier = Modifier) {
                     .size(4.dp)
                     .clip(RoundedCornerShape(50.dp))
                     .background(color)
-                    .offset(x = (x * 220f).dp, y = (y * 110f).dp)
+                    .offset(x = (x * 170f).dp, y = (y * 80f).dp)
             )
         }
     }

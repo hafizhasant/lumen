@@ -1,5 +1,10 @@
 # Changelog
    
+## [0.1.14] - 2026-11-24
+- Dark themed UI with darker background and card
+- Reduced card size for better proportion
+- Fixed icon alignment, SOS button now in bottom-right row layout
+
 ## [0.1.13] - 2026-11-24
 - Fixed remaining compile errors:
   - `TextStyle` requires `TextUnit` not `Dp` — changed `fontSize = 30.dp` to `30.sp`, `fontSize = 13.dp` to `13.sp`
