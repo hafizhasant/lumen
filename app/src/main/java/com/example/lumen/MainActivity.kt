@@ -12,8 +12,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.awaitPointerEvent
-import androidx.compose.ui.input.pointer.awaitPointerEventScope
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -149,7 +147,7 @@ fun LumenScreen(app: Context) {
                     shape = RoundedCornerShape(44.dp)
                 )
                 // Swipe up/down for strength; short tap to toggle torch
-                .pointerInput() {
+                .pointerInput {
                     var strengthChanged = false
                     var initialY = 0f
 

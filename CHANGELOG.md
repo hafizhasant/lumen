@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.20] - 2026-11-24
+- Fixed remaining compile errors:
+  - Removed top-level imports for `awaitPointerEvent`/`awaitPointerEventScope` (they are members of `PointerInputScope`, not top-level functions)
+  - Changed `.pointerInput() { }` to `.pointerInput { }` (receiver form, required in Compose 1.7.x where the empty-parens variant was removed)
+- Bumped versionCode to 20, versionName to 0.1.20
+
 ## [0.1.19] - 2026-11-24
 - Fixed remaining compile errors from CI run 45366453261:
   - Changed invalid `import androidx.compose.foundation.border.border` to `import androidx.compose.foundation.border`
