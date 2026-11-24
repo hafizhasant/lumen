@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.22] - 2026-11-24
+- Fixed `pointerInput` compile error: passed `Unit` as positional key argument (the key parameter is positional, not named)
+- Bumped versionCode to 22, versionName to 0.1.22
+
 ## [0.1.21] - 2026-11-24
 - Fixed remaining compile errors:
   - Added `key` parameter to `.pointerInput()` (required in Compose 1.7.x where the keyless variant was removed)

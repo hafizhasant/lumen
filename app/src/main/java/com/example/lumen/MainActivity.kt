@@ -147,7 +147,7 @@ fun LumenScreen(app: Context) {
                     shape = RoundedCornerShape(44.dp)
                 )
                 // Swipe up/down for strength; short tap to toggle torch
-                .pointerInput(key = 1uL) {
+                .pointerInput(Unit) {
                     var strengthChanged = false
                     var initialY = 0f
 
