@@ -8,8 +8,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.gestures.pointerInput
+import androidx.compose.ui.input.pointer.awaitPointerEvent
+import androidx.compose.ui.input.pointer.awaitPointerEventScope
+import androidx.compose.ui.input.pointer.EventType
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,17 +27,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -131,19 +132,64 @@ fun LumenScreen(app: Context) {
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color(0x3D1A2028),
-                            Color(0x2A101820)
+                            Color(0xFF2A3B54),
+                            Color(0xFF121B26)
                         )
                     )
                 )
-                .clickable {
-                    if (sosOn) return@clickable
-                    if (torchOn) {
-                        turnTorchOff(app)
-                        torchOn = false
-                    } else {
-                        turnTorchOn(app, strength)
-                        torchOn = true
+                .border(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0x55FFFFFF),
+                            Color(0x25FFFFFF)
+                        )
+                    ),
+                    width = 1.dp,
+                    shape = RoundedCornerShape(44.dp)
+                )
+                // Swipe up/down for strength; short tap to toggle torch
+                .pointerInput() {
+                    var strengthChanged = false
+                    var initialY = 0f
+
+                    awaitPointerEventScope {
+                        while (true) {
+                            val event = awaitPointerEvent()
+                            when (event.type) {
+                                EventType.PointerDown -> {
+                                    initialY = event.changes[0].position.y
+                                    strengthChanged = false
+                                }
+                                EventType.PointerMove -> {
+                                    val deltaY = event.changes[0].position.y - initialY
+                                    if (deltaY < -40f && strength < maxStrengthLevel) {
+                                        strength++
+                                        strengthChanged = true
+                                        if (torchOn) turnTorchOn(app, strength)
+                                    } else if (deltaY > 40f && strength > 1) {
+                                        strength--
+                                        strengthChanged = true
+                                        if (torchOn) turnTorchOn(app, strength)
+                                    }
+                                    initialY = event.changes[0].position.y
+                                }
+                                EventType.PointerUp -> {
+                                    if (!strengthChanged && !sosOn) {
+                                        if (torchOn) {
+                                            turnTorchOff(app)
+                                            torchOn = false
+                                        } else {
+                                            turnTorchOn(app, strength)
+                                            torchOn = true
+                                        }
+                                    }
+                                    strengthChanged = false
+                                }
+                                else -> {
+                                    // Ignore other events (PointerRelease, PointerCancel, etc.)
+                                }
+                            }
+                        }
                     }
                 },
             color = Color.Transparent
@@ -177,11 +223,26 @@ fun LumenScreen(app: Context) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(horizontalAlignment = Alignment.Start) {
-                Text(
-                    text = if (maxStrengthLevel > 1) "Strength ${strength}/${maxStrengthLevel}" else "Torch",
-                    color = Color(0xA0FFFFFF),
-                    style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Medium)
-                )
+                if (maxStrengthLevel > 1) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        (1..maxStrengthLevel).forEach { level ->
+                            Box(
+                                modifier = Modifier
+                                    .size(8.dp)
+                                    .clip(RoundedCornerShape(50.dp))
+                                    .background(
+                                        color = if (level <= strength) Color(0xFFD8B755) else Color(0x33FFFFFF),
+                                    )
+                            )
+                        }
+                    }
+                } else {
+                    Text(
+                        text = "Torch",
+                        color = Color(0xA0FFFFFF),
+                        style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                    )
+                }
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text("SOS", color = Color(0xA0FFFFFF), style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Medium))

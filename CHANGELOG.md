@@ -1,5 +1,11 @@
 # Changelog
-   
+
+## [0.1.17] - 2026-11-24
+- Improved card/background contrast: brighter glass-card gradient (0xFF2A3B54 → 0xFF121B26) with a visible border
+- Replaced "Strength X/N" text with dot indicators (one per level, gold when active)
+- Swipe up on the card increases strength, swipe down decreases it; short tap toggles torch on/off
+- SOS toggle remains in bottom-right row
+
 ## [0.1.14] - 2026-11-24
 - Dark themed UI with darker background and card
 - Reduced card size for better proportion
