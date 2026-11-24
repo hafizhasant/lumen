@@ -13,8 +13,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -31,7 +33,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -73,16 +74,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LumenTheme(content: @Composable () -> Unit) {
-    val ctx = LocalContext.current
-    val isDark = isSystemInDarkTheme()
-    val isApi31Plus = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    val scheme: ColorScheme = when {
-        isApi31Plus && isDark -> dynamicDarkColorScheme(ctx)
-        isApi31Plus -> dynamicLightColorScheme(ctx)
-        isDark -> darkColorScheme()
-        else -> lightColorScheme()
-    }
-    MaterialTheme(colorScheme = scheme, content = content)
+    MaterialTheme(colorScheme = darkColorScheme(), content = content)
 }
 
 @Composable
