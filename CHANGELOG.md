@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.21] - 2026-11-24
+- Fixed remaining compile errors:
+  - Added `key` parameter to `.pointerInput()` (required in Compose 1.7.x where the keyless variant was removed)
+  - Removed invalid top-level imports for `awaitPointerEvent`/`awaitPointerEventScope` (they are members of `PointerInputScope`)
+  - Changed `.pointerInput() { }` to `.pointerInput(key = 1uL) { }` (receiver form with key)
+- Bumped versionCode to 21, versionName to 0.1.21
+
 ## [0.1.20] - 2026-11-24
 - Fixed remaining compile errors:
   - Removed top-level imports for `awaitPointerEvent`/`awaitPointerEventScope` (they are members of `PointerInputScope`, not top-level functions)
