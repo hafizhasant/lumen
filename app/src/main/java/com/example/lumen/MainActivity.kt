@@ -49,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
@@ -122,7 +123,7 @@ fun LumenScreen(app: Context) {
         Text(
             text = if (torchOn) "Torch: on" else "Torch: off",
             color = Color(0xFFF0F0F0),
-            style = TextStyle(fontSize = 30.dp, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center),
+            style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center),
             modifier = Modifier.padding(top = 64.dp)
         )
 
@@ -180,14 +181,14 @@ fun LumenScreen(app: Context) {
             Text(
                 text = "Strength ${strength}/${maxStrengthLevel}",
                 color = Color(0x80FFFFFF),
-                style = TextStyle(fontSize = 13.dp),
+                style = TextStyle(fontSize = 13.sp),
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
 
         Spacer(Modifier.height(20.dp))
 
-        Text("SOS", color = Color(0x80FFFFFF), style = TextStyle(fontSize = 13.dp))
+        Text("SOS", color = Color(0x80FFFFFF), style = TextStyle(fontSize = 13.sp))
         Spacer(Modifier.height(4.dp))
         Switch(
             checked = sosOn,

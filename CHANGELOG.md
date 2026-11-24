@@ -1,5 +1,11 @@
 # Changelog
    
+## [0.1.13] - 2026-11-24
+- Fixed remaining compile errors:
+  - `TextStyle` requires `TextUnit` not `Dp` — changed `fontSize = 30.dp` to `30.sp`, `fontSize = 13.dp` to `13.sp`
+  - Added `import androidx.compose.ui.unit.sp`
+- Bumped versionCode to 13, versionName to 0.1.13
+
 ## [0.1.10] - 2026-11-24
 - Fixed compile errors from CI:
   - Removed invalid `import androidx.compose.foundation.layout.align`
