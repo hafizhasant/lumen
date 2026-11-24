@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.19] - 2026-11-24
+- Fixed remaining compile errors from CI run 45366453261:
+  - Changed invalid `import androidx.compose.foundation.border.border` to `import androidx.compose.foundation.border`
+  - Added top-level imports `androidx.compose.ui.input.pointer.awaitPointerEvent` and `androidx.compose.ui.input.pointer.awaitPointerEventScope` (required when called inside a plain `.pointerInput() { }` block without a receiver scope)
+- Bumped versionCode to 19, versionName to 0.1.19
+
 ## [0.1.18] - 2026-11-24
 - Fixed compile errors from CI run 45363835598:
   - `pointerInput` moved to `androidx.compose.ui.input.pointer` (was `androidx.compose.foundation.gestures`)
