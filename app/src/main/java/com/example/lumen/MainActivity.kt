@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.align
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -27,6 +26,7 @@ import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextStyle
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
@@ -121,9 +122,7 @@ fun LumenScreen(app: Context) {
         Text(
             text = if (torchOn) "Torch: on" else "Torch: off",
             color = Color(0xFFF0F0F0),
-            fontSize = 30.dp,
-            fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Center,
+            style = TextStyle(fontSize = 30.dp, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center),
             modifier = Modifier.padding(top = 64.dp)
         )
 
@@ -181,14 +180,14 @@ fun LumenScreen(app: Context) {
             Text(
                 text = "Strength ${strength}/${maxStrengthLevel}",
                 color = Color(0x80FFFFFF),
-                fontSize = 13.dp,
+                style = TextStyle(fontSize = 13.dp),
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
 
         Spacer(Modifier.height(20.dp))
 
-        Text("SOS", color = Color(0x80FFFFFF), fontSize = 13.dp)
+        Text("SOS", color = Color(0x80FFFFFF), style = TextStyle(fontSize = 13.dp))
         Spacer(Modifier.height(4.dp))
         Switch(
             checked = sosOn,
@@ -219,7 +218,7 @@ private fun FlashlightDotArc(active: Boolean, modifier: Modifier = Modifier) {
                     .size(4.dp)
                     .clip(RoundedCornerShape(50.dp))
                     .background(color)
-                    .offset(x = (x * 220f).toInt(), y = (y * 110f).toInt())
+                    .offset(x = (x * 220f).dp, y = (y * 110f).dp)
             )
         }
     }

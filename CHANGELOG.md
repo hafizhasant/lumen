@@ -1,5 +1,14 @@
 # Changelog
-  
+   
+## [0.1.10] - 2026-11-24
+- Fixed compile errors from CI:
+  - Removed invalid `import androidx.compose.foundation.layout.align`
+  - Added missing `import androidx.compose.material3.Surface`
+  - Added missing `import androidx.compose.ui.text.style.TextStyle`
+  - Converted `Text` calls to use `style = TextStyle(...)` instead of separate `fontSize`/`fontWeight`/`textAlign` parameters
+  - Fixed `.offset()` in `FlashlightDotArc` to use `.dp()` instead of `.toInt()`
+- Bumped versionCode to 10, versionName to 0.1.10
+
 ## [0.1.6] - 2026-11-20
 - Fixed CI build: `android-actions/setup-android@v4`'s `packages:` input did not install `platforms;android-34` or `build-tools;34.0.0` (only the default `platform-tools` was installed), so `compileSdk = 34` could not resolve Android platform classes (camera2 `enumerateCameraIds`, `FLASH_INFO_MAX_TORCH_MODE`, Material3 themes). Added an explicit `sdkmanager "platforms;android-34" "build-tools;34.0.0"` step after the setup step.
 - Bumped versionCode to 6, versionName to 0.1.6

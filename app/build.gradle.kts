@@ -11,8 +11,8 @@ android {
         applicationId = "com.example.lumen"
         minSdk = 26
         targetSdk = 34
-        versionCode = 6
-        versionName = "0.1.6"
+        versionCode = 10
+        versionName = "0.1.10"
     }
 
     signingConfigs {
