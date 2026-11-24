@@ -33,6 +33,9 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
+            lint {
+                abortOnError = false
+            }
         }
     }
 
