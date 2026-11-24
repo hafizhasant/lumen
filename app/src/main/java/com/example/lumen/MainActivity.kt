@@ -8,11 +8,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.pointerInput
-import androidx.compose.ui.input.pointer.awaitPointerEvent
-import androidx.compose.ui.input.pointer.awaitPointerEventScope
-import androidx.compose.ui.input.pointer.EventType
+import androidx.compose.foundation.border.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -156,11 +155,11 @@ fun LumenScreen(app: Context) {
                         while (true) {
                             val event = awaitPointerEvent()
                             when (event.type) {
-                                EventType.PointerDown -> {
+                                PointerEventType.Press -> {
                                     initialY = event.changes[0].position.y
                                     strengthChanged = false
                                 }
-                                EventType.PointerMove -> {
+                                PointerEventType.Move -> {
                                     val deltaY = event.changes[0].position.y - initialY
                                     if (deltaY < -40f && strength < maxStrengthLevel) {
                                         strength++
@@ -173,7 +172,7 @@ fun LumenScreen(app: Context) {
                                     }
                                     initialY = event.changes[0].position.y
                                 }
-                                EventType.PointerUp -> {
+                                PointerEventType.Release -> {
                                     if (!strengthChanged && !sosOn) {
                                         if (torchOn) {
                                             turnTorchOff(app)

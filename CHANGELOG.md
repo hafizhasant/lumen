@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.18] - 2026-11-24
+- Fixed compile errors from CI run 45363835598:
+  - `pointerInput` moved to `androidx.compose.ui.input.pointer` (was `androidx.compose.foundation.gestures`)
+  - Removed invalid top-level imports for `awaitPointerEvent`, `awaitPointerEventScope`, `EventType`; these resolve through their receiver scopes inside the `pointerInput` block
+  - Renamed `EventType.PointerDown`/`PointerMove`/`PointerUp` to `PointerEventType.Press`/`Move`/`Release`
+  - Added `import androidx.compose.foundation.border.border`
+
 ## [0.1.17] - 2026-11-24
 - Improved card/background contrast: brighter glass-card gradient (0xFF2A3B54 → 0xFF121B26) with a visible border
 - Replaced "Strength X/N" text with dot indicators (one per level, gold when active)
